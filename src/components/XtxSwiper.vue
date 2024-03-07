@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { BannerItem } from '@/types/home'
+import { defineProps } from 'vue'
 
-const activeIndex = ref(0)
+const props = defineProps<{
+  list: BannerItem[]
+}>()
 </script>
 
 <template>
   <view class="carousel">
-    <!-- indicator-color="#fff" -->
     <swiper
       indicator-dots
       indicator-active-color="#fff"
@@ -14,42 +16,23 @@ const activeIndex = ref(0)
       :autoplay="false"
       :interval="3000"
     >
-      <swiper-item>
+      <swiper-item v-for="item in list" :key="item.id">
         <navigator url="/pages/index/index" hover-class="none" class="navigator">
-          <image mode="aspectFill" class="image" src="../static/images/slider_1.jpg"></image>
-        </navigator>
-      </swiper-item>
-      <swiper-item>
-        <navigator url="/pages/index/index" hover-class="none" class="navigator">
-          <image mode="aspectFill" class="image" src="../static/images/slider_2.jpg"></image>
-        </navigator>
-      </swiper-item>
-      <swiper-item>
-        <navigator url="/pages/index/index" hover-class="none" class="navigator">
-          <image mode="aspectFill" class="image" src="../static/images/slider_3.jpg"></image>
+          <image mode="aspectFill" class="image" :src="item.imgUrl"></image>
         </navigator>
       </swiper-item>
     </swiper>
-    <!-- 指示点 -->
-    <!-- <view class="indicator">
-      <text
-        v-for="(item, index) in 3"
-        :key="item"
-        class="dot"
-        :class="{ active: index === activeIndex }"
-      ></text>
-    </view> -->
   </view>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 :host {
   display: block;
   height: 280rpx;
 }
 /* 轮播图 */
 .carousel {
-  height: 100%;
+  height: 280rpx;
   position: relative;
   overflow: hidden;
   transform: translateY(0);
