@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, defineExpose } from 'vue'
 import { getGuessLikeAPI } from '@/services/home'
-import type { LikeItem } from '@/types/home'
+import type { LikeItem } from '@/types/global'
 //获取 猜你喜欢 数据
 let guessList = ref<LikeItem[]>([])
 let finished = ref(true)

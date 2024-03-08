@@ -20,15 +20,6 @@ export type MutliItem = {
   type: number
 }
 
-// 猜你喜欢
-export type LikeItem = {
-  desc: string
-  id: string
-  name: string
-  orderNum: number
-  picture: string
-  price: string
-}
 export type PageResult<T> = {
   counts: number
   items: T[]

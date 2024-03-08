@@ -1,6 +1,7 @@
 // 存放路径: src/services/home.ts
 import { http } from '@/utils/http'
-import type { BannerItem, CategoryItem, MutliItem, PageResult, LikeItem } from '../types/home'
+import type { BannerItem, CategoryItem, MutliItem } from '../types/home'
+import type { LikeItem, PageResult } from '@/types/global'
 
 /**
  * 首页-广告轮播图区域

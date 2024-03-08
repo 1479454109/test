@@ -13,7 +13,7 @@ const props = defineProps<{
       indicator-dots
       indicator-active-color="#fff"
       :circular="true"
-      :autoplay="false"
+      :autoplay="true"
       :interval="3000"
     >
       <swiper-item v-for="item in list" :key="item.id">

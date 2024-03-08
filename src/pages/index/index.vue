@@ -1,10 +1,20 @@
 <template>
   <Navbar />
-  <scroll-view @scrolltolower="onScrolltolower" class="scrollBox" scroll-y>
-    <XtxSwiper :list="bannerList" />
-    <Category :list="categoryList" />
-    <HotPanel :list="mutliList" />
-    <XtxGuess ref="guess" />
+  <scroll-view
+    refresher-enabled
+    @refresherrefresh="onrefresherrefresh"
+    @scrolltolower="onScrolltolower"
+    :refresher-triggered="isTriggered"
+    class="scrollBox"
+    scroll-y
+  >
+    <PageSkeleton v-if="isOnLoad" />
+    <template v-else>
+      <XtxSwiper :list="bannerList" />
+      <Category :list="categoryList" />
+      <HotPanel :list="mutliList" />
+      <XtxGuess ref="guess" />
+    </template>
   </scroll-view>
 </template>
 
@@ -13,15 +23,16 @@ import { ref } from 'vue'
 import Navbar from './componet/navbar.vue'
 import Category from './componet/category.vue'
 import HotPanel from './componet/hotPanel.vue'
+import PageSkeleton from './componet/PageSkeleton.vue'
 import { getHomeBannerAPI, getCategoryAPI, getMutliAPI } from '@/services/home'
 import type { BannerItem, CategoryItem, MutliItem } from '@/types/home'
 import type { XtxGuessInstance } from '@/types/component'
 import { onLoad } from '@dcloudio/uni-app'
 
-onLoad(() => {
-  getHomeBannerData()
-  getCategory()
-  getMutli()
+let isOnLoad = ref(true) //骨灰架
+onLoad(async () => {
+  await Promise.all([getHomeBannerData(), getCategory(), getMutli()])
+  isOnLoad.value = false
 })
 //获取轮播图数据
 const bannerList = ref<BannerItem[]>([])
@@ -46,13 +57,25 @@ const getMutli = async () => {
 let guess = ref<XtxGuessInstance>()
 let page = ref<number>(1)
 const onScrolltolower = () => {
-  console.log(guess.value?.finished)
-
   //是否已是全部记录
   if (guess.value?.finished) {
     page.value = page.value + 1
     guess.value?.getGuessLike(page.value, 10)
   }
+}
+//下拉刷新
+const isTriggered = ref(false)
+const onrefresherrefresh = async () => {
+  page.value = 1 //重置页码
+  isTriggered.value = true
+  // await getHomeBannerData()  //单个
+  await Promise.all([
+    getHomeBannerData(),
+    getCategory(),
+    getMutli(),
+    guess.value?.getGuessLike(page.value, 10),
+  ]) //多个请求一起发送
+  isTriggered.value = false //等待请求发送完才执行
 }
 </script>
 
