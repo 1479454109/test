@@ -6,7 +6,7 @@ import { ref } from 'vue'
 import Detail from './comonent/detail.vue'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
-//获取id
+//获取id 和 详情数据
 const query = defineProps<{
   id: string
 }>()
@@ -14,11 +14,24 @@ let goodsData = ref<GoodsResult>()
 const getGoodsData = async () => {
   const res = await getGoodsByIdAPI(query.id)
   goodsData.value = res.result
-  console.log(goodsData.value)
 }
 onLoad(() => {
   getGoodsData()
 })
+
+//轮播图改变事件
+let imgIndex = ref(0)
+const onChange = (ev: any) => {
+  imgIndex.value = ev.detail.current
+}
+
+//大图预览
+const onImage = (src: string) => {
+  uni.previewImage({
+    current: src, //路径
+    urls: goodsData.value?.mainPictures as string[], //图片集合
+  })
+}
 </script>
 
 <template>
@@ -27,15 +40,15 @@ onLoad(() => {
     <view class="goods">
       <!-- 商品主图 -->
       <view class="preview">
-        <swiper circular>
+        <swiper @change="onChange" circular>
           <swiper-item v-for="item in goodsData?.mainPictures" :key="item">
-            <image mode="aspectFill" :src="item" />
+            <image @tap="onImage(item)" mode="aspectFill" :src="item" />
           </swiper-item>
         </swiper>
         <view class="indicator">
-          <text class="current">1</text>
+          <text class="current">{{ imgIndex + 1 }}</text>
           <text class="split">/</text>
-          <text class="total">5</text>
+          <text class="total">{{ goodsData?.mainPictures.length }}</text>
         </view>
       </view>
 
