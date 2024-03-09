@@ -10,12 +10,16 @@ const getGuessLike = async (n = 1, m = 10) => {
   guessList.value.push(...res.result.items)
   finished.value = n * 10 < res.result.counts
 }
+let rept = () => {
+  guessList.value = []
+}
 onMounted(async () => {
   getGuessLike()
 })
 defineExpose({
   getGuessLike,
   finished,
+  rept,
 })
 </script>
 

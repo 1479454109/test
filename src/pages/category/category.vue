@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { getHomeBannerAPI } from '@/services/home'
 import { getCategoryTopAPI } from '@/services/category'
 import type { BannerItem } from '@/types/home'

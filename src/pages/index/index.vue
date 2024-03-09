@@ -26,8 +26,8 @@ import HotPanel from './componet/hotPanel.vue'
 import PageSkeleton from './componet/PageSkeleton.vue'
 import { getHomeBannerAPI, getCategoryAPI, getMutliAPI } from '@/services/home'
 import type { BannerItem, CategoryItem, MutliItem } from '@/types/home'
-import type { XtxGuessInstance } from '@/types/component'
 import { onLoad } from '@dcloudio/uni-app'
+import { useGuessList } from '@/composables/index'
 
 let isOnLoad = ref(true) //骨灰架
 onLoad(async () => {
@@ -53,30 +53,8 @@ const getMutli = async () => {
   mutliList.value = res.result
 }
 
-//滚动触底
-let guess = ref<XtxGuessInstance>()
-let page = ref<number>(1)
-const onScrolltolower = () => {
-  //是否已是全部记录
-  if (guess.value?.finished) {
-    page.value = page.value + 1
-    guess.value?.getGuessLike(page.value, 10)
-  }
-}
-//下拉刷新
-const isTriggered = ref(false)
-const onrefresherrefresh = async () => {
-  page.value = 1 //重置页码
-  isTriggered.value = true
-  // await getHomeBannerData()  //单个
-  await Promise.all([
-    getHomeBannerData(),
-    getCategory(),
-    getMutli(),
-    guess.value?.getGuessLike(page.value, 10),
-  ]) //多个请求一起发送
-  isTriggered.value = false //等待请求发送完才执行
-}
+//猜你喜欢 滚动触底、下拉刷新
+const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList()
 </script>
 
 <style lang="scss">

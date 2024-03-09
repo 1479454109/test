@@ -4,6 +4,9 @@ import { onLoad } from '@dcloudio/uni-app'
 import type { GoodsResult } from '@/types/goods'
 import { ref } from 'vue'
 import Detail from './comonent/detail.vue'
+import ServicePanel from './comonent/ServicePanel.vue'
+import AddressPanel from './comonent/AddressPanel.vue'
+import GoodsSkeleton from './comonent/goodsSkeleton.vue'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 //获取id 和 详情数据
@@ -15,9 +18,13 @@ const getGoodsData = async () => {
   const res = await getGoodsByIdAPI(query.id)
   goodsData.value = res.result
 }
-onLoad(() => {
-  getGoodsData()
+onLoad(async () => {
+  await getGoodsData()
+  isSkeleton.value = false
 })
+
+//骨架屏
+let isSkeleton = ref(true)
 
 //轮播图改变事件
 let imgIndex = ref(0)
@@ -32,10 +39,19 @@ const onImage = (src: string) => {
     urls: goodsData.value?.mainPictures as string[], //图片集合
   })
 }
+
+//弹出层
+const popup = ref()
+let popupComonent = ref('')
+const popupOpen = (e: 'ServicePanel' | 'AddressPanel') => {
+  popupComonent.value = e
+  popup.value?.open()
+}
 </script>
 
 <template>
-  <scroll-view scroll-y class="viewport">
+  <GoodsSkeleton v-if="isSkeleton" />
+  <scroll-view v-if="!isSkeleton" scroll-y class="viewport">
     <!-- 基本信息 -->
     <view class="goods">
       <!-- 商品主图 -->
@@ -68,11 +84,11 @@ const onImage = (src: string) => {
           <text class="label">选择</text>
           <text class="text ellipsis"> 请选择商品规格 </text>
         </view>
-        <view class="item arrow">
+        <view @tap="popupOpen('AddressPanel')" class="item arrow">
           <text class="label">送至</text>
           <text class="text ellipsis"> 请选择收获地址 </text>
         </view>
-        <view class="item arrow">
+        <view @tap="popupOpen('ServicePanel')" class="item arrow">
           <text class="label">服务</text>
           <text class="text ellipsis"> 无忧退 快速退款 免费包邮 </text>
         </view>
@@ -107,7 +123,11 @@ const onImage = (src: string) => {
   </scroll-view>
 
   <!-- 用户操作 -->
-  <view class="toolbar" :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }">
+  <view
+    v-if="!isSkeleton"
+    class="toolbar"
+    :style="{ paddingBottom: safeAreaInsets?.bottom + 'px' }"
+  >
     <view class="icons">
       <button class="icons-button"><text class="icon-heart"></text>收藏</button>
       <button class="icons-button" open-type="contact">
@@ -122,6 +142,11 @@ const onImage = (src: string) => {
       <view class="buynow"> 立即购买 </view>
     </view>
   </view>
+
+  <uni-popup ref="popup" type="bottom" background-color="#fff">
+    <ServicePanel v-if="popupComonent == 'ServicePanel'" @close="popup.close()" />
+    <AddressPanel v-else @close="popup.close()" />
+  </uni-popup>
 </template>
 
 <style lang="scss" scoped>
