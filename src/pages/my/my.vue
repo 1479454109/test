@@ -35,11 +35,7 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
         <!-- 情况1：已登录 -->
         <view class="overview" v-if="store?.profile">
           <navigator url="/pagesMember/profile/profile" hover-class="none">
-            <image
-              class="avatar"
-              mode="aspectFill"
-              src="https://pcapi-xiaotuxian-front-devtest.itheima.net/miniapp/uploads/avatar_3.jpg"
-            ></image>
+            <image class="avatar" mode="aspectFill" :src="store?.profile?.avatar"></image>
           </navigator>
           <view class="meta">
             <view class="nickname"> {{ store?.profile.nickname || store?.profile.account }} </view>

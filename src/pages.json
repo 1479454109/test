@@ -109,15 +109,25 @@
 					"style": {
 						"navigationBarTitleText": "设置"
 					}
+				},
+				{
+					"path": "profile/profile",
+					"style": {
+						"navigationBarTitleText": "个人信息",
+						"navigationStyle": "custom", //隐藏导航栏
+						"navigationBarTextStyle": "white" //导航栏字体颜色
+					}
 				}
 			]
 		}
 	],
 	// 分包预下载规则
 	"preloadRule": {
-	  "pages/my/my": {
-		"network": "all", // [!code ++]
-		"packages": ["pagesMember"] // [!code ++]
-	  }
+		"pages/my/my": {
+			"network": "all", // [!code ++]
+			"packages": [
+				"pagesMember"
+			] // [!code ++]
+		}
 	}
 }

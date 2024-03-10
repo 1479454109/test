@@ -5,6 +5,7 @@ import type { BannerItem } from '@/types/home'
 import type { CategoryTopType, CategoryTopChildrenType } from '@/types/category'
 import { onLoad } from '@dcloudio/uni-app'
 import CategorySkeleton from './componet/categorySkeleton.vue'
+import { ref } from 'vue'
 //获取轮播图数据
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
