@@ -1,7 +1,30 @@
 // AddressPanel.vue
 <script setup lang="ts">
-import { defineEmits } from 'vue'
+import { getMemberAddressAPI } from '@/services/address'
+import { addressStore } from '@/stores/modules/address'
+import type { AddressItem } from '@/types/global'
+import { onShow } from '@dcloudio/uni-app'
+import { defineEmits, ref } from 'vue'
 const emit = defineEmits(['close'])
+
+//获取地址列表
+const addressList = ref<AddressItem[]>([])
+const getAddressList = async () => {
+  const res = await getMemberAddressAPI()
+  addressList.value = res.result
+  const fd = res.result.find((x) => x.isDefault)
+  if (!store.selectedAddress) {
+    store.changeSelectedAddress(fd ? fd : res.result[0])
+  }
+}
+onShow(() => {
+  getAddressList()
+})
+
+const store = addressStore()
+const onSelect = (e: AddressItem) => {
+  store.changeSelectedAddress(e)
+}
 </script>
 
 <template>
@@ -12,25 +35,18 @@ const emit = defineEmits(['close'])
     <view class="title">配送至</view>
     <!-- 内容 -->
     <view class="content">
-      <view class="item">
-        <view class="user">李明 13824686868</view>
-        <view class="address">北京市顺义区后沙峪地区安平北街6号院</view>
-        <text class="icon icon-checked"></text>
-      </view>
-      <view class="item">
-        <view class="user">王东 13824686868</view>
-        <view class="address">北京市顺义区后沙峪地区安平北街6号院</view>
-        <text class="icon icon-ring"></text>
-      </view>
-      <view class="item">
-        <view class="user">张三 13824686868</view>
-        <view class="address">北京市朝阳区孙河安平北街6号院</view>
-        <text class="icon icon-ring"></text>
+      <view class="item" @tap="onSelect(item)" v-for="item in addressList" :key="item.id">
+        <view class="user">{{ item.receiver }} {{ item.contact }}</view>
+        <view class="address">{{ item.fullLocation }} {{ item.address }}</view>
+        <text
+          class="icon"
+          :class="{ 'icon-checked': item?.id == store?.selectedAddress?.id }"
+        ></text>
       </view>
     </view>
     <view class="footer">
-      <view class="button primary"> 新建地址 </view>
-      <view v-if="false" class="button primary">确定</view>
+      <view v-if="addressList?.length > 0" @tap="emit('close')" class="button primary">确定</view>
+      <view v-else class="button primary"> 新建地址 </view>
     </view>
   </view>
 </template>

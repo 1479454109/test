@@ -14,6 +14,7 @@ import type {
   SkuPopupEvent,
 } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
 import { postMemberCartAPI } from '@/services/cart'
+import { addressStore } from '@/stores/modules/address'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 //获取id 和 详情数据
@@ -39,7 +40,6 @@ const getGoodsData = async () => {
       sku_name_arr: v.specs.map((vv) => vv.valueName),
     })),
   }
-  console.log(localdata.value)
 }
 onLoad(async () => {
   await getGoodsData()
@@ -71,6 +71,9 @@ const popupOpen = (e: 'ServicePanel' | 'AddressPanel') => {
   popup.value?.open()
 }
 
+//配送地址
+const store = addressStore()
+
 //是否显示Sku
 const isShowSku = ref(false)
 //sku商品信息
@@ -101,6 +104,11 @@ const onAddCart = async (ev: SkuPopupEvent) => {
   uni.showToast({ title: '添加成功' })
   isShowSku.value = false
 }
+
+// 立即购买
+const onBuyNow = (ev: SkuPopupEvent) => {
+  uni.navigateTo({ url: `/pagesOrder/create/create?skuId=${ev._id}&count=${ev.buy_num}` })
+}
 </script>
 
 <template>
@@ -110,6 +118,7 @@ const onAddCart = async (ev: SkuPopupEvent) => {
     v-model="isShowSku"
     :localdata="localdata"
     @add-cart="onAddCart"
+    @buy-now="onBuyNow"
     add-cart-background-color="#FFA868"
     buy-now-background-color="#27BA9B"
     :actived-style="{
@@ -154,7 +163,10 @@ const onAddCart = async (ev: SkuPopupEvent) => {
         </view>
         <view @tap="popupOpen('AddressPanel')" class="item arrow">
           <text class="label">送至</text>
-          <text class="text ellipsis"> 请选择收获地址 </text>
+          <text class="text ellipsis" v-if="store.selectedAddress">
+            {{ store.selectedAddress.fullLocation }}{{ store.selectedAddress.address }}
+          </text>
+          <text class="text ellipsis" v-else> 请选择收获地址 </text>
         </view>
         <view @tap="popupOpen('ServicePanel')" class="item arrow">
           <text class="label">服务</text>
@@ -201,7 +213,7 @@ const onAddCart = async (ev: SkuPopupEvent) => {
       <button class="icons-button" open-type="contact">
         <text class="icon-handset"></text>客服
       </button>
-      <navigator class="icons-button" url="/pages/cart/cart" open-type="switchTab">
+      <navigator class="icons-button" url="/pages/cart/cart2" open-type="navigate">
         <text class="icon-cart"></text>购物车
       </navigator>
     </view>

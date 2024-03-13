@@ -34,6 +34,12 @@
 			}
 		},
 		{
+			"path": "pages/cart/cart2",
+			"style": {
+				"navigationBarTitleText": "购物车"
+			}
+		},
+		{
 			"path": "pages/category/category",
 			"style": {
 				"navigationBarTitleText": "分类"
@@ -128,6 +134,25 @@
 					"path": "address-form/address-form",
 					"style": {
 						"navigationBarTitleText": "新建地址"
+					}
+				}
+			]
+		},
+		{
+			"root": "pagesOrder",
+			"pages": [
+				{
+					"path": "create/create",
+					"style": {
+						"navigationBarTitleText": "新建订单"
+					}
+				},
+				{
+					"path": "detail/detail",
+					"style": {
+						"navigationBarTitleText": "订单详情页",
+						"navigationStyle": "custom", //隐藏导航栏
+						"navigationBarTextStyle": "white" //导航栏字体颜色
 					}
 				}
 			]
