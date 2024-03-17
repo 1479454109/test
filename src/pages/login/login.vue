@@ -1,20 +1,27 @@
 <script setup lang="ts">
 import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
 import { LoginWxMinAPI, LoginWxMinSimpleAPI } from '@/services/login'
 import { useMemberStore } from '@/stores'
 //1、获取code
 let code = ''
 onLoad(async () => {
+  //  #ifdef MP-WEIXIN 
   const res = await wx.login()
   code = res.code
+  //  #endif
 })
-//2、获取用户手机号码
+// 获取用户手机号码
 const onGetphonenumber: UniHelper.ButtonOnGetphonenumber = async (ev) => {
-  console.log(ev.detail!)
-  const res = await LoginWxMinAPI(code, ev.detail!.iv!, ev.detail!.encryptedData!)
+  // 获取参数
+  console.log(ev.detail);
+  
+  const encryptedData = ev.detail.encryptedData!
+  const iv = ev.detail.iv!
+  // 登录请求
+  await LoginWxMinAPI(code, iv, encryptedData)
+  // 成功提示
+  uni.showToast({ icon: 'none', title: '登录成功' })
 }
-
 //内测登录
 const onLogin = async () => {
   const res = await LoginWxMinSimpleAPI('16680191465')
@@ -39,15 +46,20 @@ const onLogin = async () => {
     </view>
     <view class="login">
       <!-- 网页端表单登录 -->
-      <!-- <input class="input" type="text" placeholder="请输入用户名/手机号码" /> -->
-      <!-- <input class="input" type="text" password placeholder="请输入密码" /> -->
-      <!-- <button class="button phone">登录</button> -->
+      <!-- #ifdef H5  || APP-PLUS-->
+      <input class="input" type="text" placeholder="请输入用户名/手机号码" />
+      <input class="input" type="text" password placeholder="请输入密码" />
+      <button @tap="onLogin" class="button phone">登录</button>
+      <!-- #endif -->
 
       <!-- 小程序端授权登录 -->
+      <!-- #ifdef MP-WEIXIN -->
       <button class="button phone" open-type="getPhoneNumber" @getphonenumber="onGetphonenumber">
         <text class="icon icon-phone"></text>
         手机号快捷登录
       </button>
+      <!--  #endif-->
+
       <view class="extra">
         <view class="caption">
           <text>其他登录方式</text>

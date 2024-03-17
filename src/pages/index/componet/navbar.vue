@@ -14,8 +14,7 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
     <view class="search">
       <text class="icon-search">搜索商品</text>
       <text class="icon-scan"></text>
-    </view>
-  </view>
+    </view> </view>
 </template>
 
 <style lang="scss" scoped>

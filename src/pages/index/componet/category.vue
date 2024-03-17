@@ -21,31 +21,30 @@ const props = defineProps<{
   </view>
 </template>
 
-<style lang="scss" scoped>
-/* 前台类目 */
+<style lang="scss">
 .category {
-  margin: 20rpx 0 0;
-  padding: 10rpx 0;
-  display: flex;
-  flex-wrap: wrap;
-  min-height: 328rpx;
-
-  .category-item {
-    width: 150rpx;
+    margin: 20rpx 0 0;
+    padding: 10rpx 0;
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    box-sizing: border-box;
-
-    .icon {
-      width: 100rpx;
-      height: 100rpx;
-    }
-    .text {
-      font-size: 26rpx;
-      color: #666;
+    flex-wrap: wrap;
+    min-height: 328rpx;
+  
+    .category-item {
+      width: 150rpx;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+  
+      .icon {
+        width: 100rpx;
+        height: 100rpx;
+      }
+      .text {
+        font-size: 26rpx;
+        color: #666;
+      }
     }
   }
-}
 </style>

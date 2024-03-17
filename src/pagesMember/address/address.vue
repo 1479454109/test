@@ -33,10 +33,16 @@ const onDelete = (id: string) => {
 }
 
 //修改store选择地址
-const onCkAddress = (e: AddressItem) => {
+const onCkAddress = (e: AddressItem) => { 
   const store = addressStore()
+  console.log(store);  
   store.changeSelectedAddress(e)
   uni.navigateBack()
+}
+
+const cs=()=>{
+  const store = addressStore()
+  console.log(store);
 }
 </script>
 
@@ -46,14 +52,13 @@ const onCkAddress = (e: AddressItem) => {
     <scroll-view class="scroll-view" scroll-y>
       <view v-if="addressList!.length>0" class="address">
         <uni-swipe-action class="address-list">
-          <!-- 收货地址项 -->
+          <!-- 收货地址项 --> 
           <uni-swipe-action-item
-            @tap="onCkAddress(item)"
             class="item"
             v-for="item in addressList"
-            :key="item.id"
+            :key="item.id" 
           >
-            <view class="item-content">
+            <view class="item-content" @tap="onCkAddress(item)"  >
               <view class="user">
                 {{ item.receiver }}
                 <text class="contact">{{ item.contact }}</text>
@@ -64,9 +69,10 @@ const onCkAddress = (e: AddressItem) => {
               <view class="locate">{{ item.fullLocation }} {{ item.address }}</view>
               <navigator
                 @tap.stop="() => {}"
+                @tap.prevent="() => {}"
                 class="edit"
                 hover-class="none"
-                :url="`/pagesMember/address-form/address-form?id=${item?.id}`"
+                :url="`/pagesMember/address-form/address-form?id=${item?.id}`" 
               >
                 修改
               </navigator>

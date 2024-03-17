@@ -52,7 +52,7 @@ const rules: UniHelper.UniFormsRules = {
       { pattern: /^1[3-9]\d{9}$/, errorMessage: '手机号格式不正确' },
     ],
   },
-  fullLocation: {
+  countyCode: {
     rules: [{ required: true, errorMessage: '请选择所在地区' }],
   },
   address: {
@@ -62,11 +62,19 @@ const rules: UniHelper.UniFormsRules = {
 const formRef = ref<UniHelper.UniFormsInstance>() // [!code ++]
 
 //所在地区
+// #ifdef MP-WEIXIN
 const onChange = (e: any) => {
   form.value.fullLocation = e.detail.value.join(' ')
   const [provinceCode, cityCode, countyCode] = e.detail.code
   Object.assign(form.value, { provinceCode, cityCode, countyCode })
 }
+// #endif
+//  #ifdef H5 || APP-PLUS
+const onCityChange = (e: any) => {
+  const [provinceCode, cityCode, countyCode] = e.detail.value.map((e: any) => e.value)
+  Object.assign(form.value, { provinceCode, cityCode, countyCode })
+}
+// #endif
 //设为默认
 const onSwitchChange = (e: any) => {
   form.value.isDefault = e.detail.value ? 1 : 0
@@ -107,12 +115,30 @@ const addEitAddress = async () => {
         <text class="label">手机号码</text>
         <input class="input" v-model="form.contact" placeholder="请填写收货人手机号码" />
       </uni-forms-item>
-      <uni-forms-item class="form-item" name="fullLocation">
+      <uni-forms-item class="form-item" name="countyCode">
         <text class="label">所在地区</text>
+        <!-- #ifdef MP-WEIXIN -->
         <picker class="picker" mode="region" @change="onChange">
           <view v-if="form.fullLocation">{{ form.fullLocation }}</view>
           <view v-else class="placeholder">请选择省/市/区(县)</view>
         </picker>
+        <!-- #endif -->
+        <!-- #ifdef H5 || APP-PLUS -->
+        <uni-data-picker
+          placeholder="请选择地址"
+          popup-title="请选择城市"
+          collection="opendb-city-china"
+          field="code as value, name as text"
+          orderby="value asc"
+          :step-searh="true"
+          self-field="code"
+          parent-field="parent_code"
+          :clear-icon="false"
+          @change="onCityChange"
+          v-model="form.countyCode"
+        >
+        </uni-data-picker>
+        <!-- #endif -->
       </uni-forms-item>
       <uni-forms-item class="form-item" name="address">
         <text class="label">详细地址</text>
@@ -137,7 +163,16 @@ const addEitAddress = async () => {
 page {
   background-color: #f4f4f4;
 }
-
+/* #ifdef H5 || APP-PLUS */
+.content {
+  .uni-forms {
+    :deep(.selected-area) {
+      height: auto;
+      flex: 0 1 auto;
+    }
+  }
+}
+/* #endif */
 .content {
   margin: 20rpx 20rpx 0;
   padding: 0 20rpx;

@@ -3,7 +3,7 @@ import { getMemberProfileAPI, putMemberProfileAPI } from '@/services/profile'
 import type { userInfo } from '@/types/user'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-import { useMemberStore } from '@/stores/index'
+import { useMemberStore } from '@/stores/index' 
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -27,6 +27,10 @@ const pickerRegionChange = (evt: any) => {
   fullLocationCode = evt.detail.code
   info.value!.fullLocation = evt.detail.value.join(' ')
 }
+let defaultRegionCode =ref('440113');
+const handleGetRegion=(region:any)=>{
+  console.log(region); 
+            }
 //保存个人信息
 const store = useMemberStore()
 const commit = async () => {
@@ -52,6 +56,41 @@ const commit = async () => {
 }
 //修改头像
 const eitImage = () => {
+  // 调用拍照/选择图片
+  // #ifdef MP-WEIXIN
+  uni.chooseMedia({
+    // 文件个数
+    count: 1,
+    // 文件类型
+    mediaType: ['image'],
+    success: (res) => {
+      // 本地路径
+      const { tempFilePath } = res.tempFiles[0]
+      // 文件上传
+      uni.uploadFile({
+        url: '/member/profile/avatar', // [!code ++]
+        name: 'file', // 后端数据字段名  // [!code ++]
+        filePath: tempFilePath, // 新头像  // [!code ++]
+        success: (res) => {
+          // 判断状态码是否上传成功
+          if (res.statusCode === 200) {
+            // 提取头像
+            const { avatar } = JSON.parse(res.data).result
+            // 当前页面更新头像
+            info.value!.avatar = avatar // [!code ++]
+            // 更新 Store 头像
+            store.profile!.avatar = avatar // [!code ++]
+            uni.showToast({ icon: 'success', title: '更新成功' })
+          } else {
+            uni.showToast({ icon: 'error', title: '出现错误' })
+          }
+        },
+      })
+    },
+  })
+  // #endif
+
+  // #ifdef H5 || APP-PLUS
   uni.chooseImage({
     // 文件个数
     count: 1,
@@ -82,6 +121,7 @@ const eitImage = () => {
       })
     },
   })
+  // #endif
 }
 </script>
 
@@ -140,6 +180,7 @@ const eitImage = () => {
         </view>
         <view class="form-item">
           <text class="label">城市</text>
+          <!-- #ifdef MP-WEIXIN -->
           <picker
             @change="pickerRegionChange"
             class="picker"
@@ -149,6 +190,11 @@ const eitImage = () => {
             <view v-if="info?.fullLocation">{{ info?.fullLocation }}</view>
             <view class="placeholder" v-else>请选择城市</view>
           </picker>
+          <!-- #endif -->
+
+          <!-- #ifdef H5 || APP-PLUS--> 
+          <!-- #endif -->
+
         </view>
         <view class="form-item">
           <text class="label">职业</text>

@@ -89,11 +89,13 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
             {{ item.text }}
           </navigator>
           <!-- 客服 -->
-          <button class="contact icon-handset" open-type="contact">售后</button>
+          <!-- #ifdef MP-WEIXIN -->
+          <button class="contact icon-handset" open-type="contact">售后</button> 
+          <!-- #endif -->
         </view>
       </view>
       <!-- 猜你喜欢 -->
-      <view class="guess">
+      <view class="guessBox">
         <XtxGuess ref="guess" />
       </view>
     </view>
@@ -232,7 +234,7 @@ page {
   }
 
   /* 猜你喜欢 */
-  .guess {
+  .guessBox {
     background-color: #f7f7f8;
     margin-top: 20rpx;
   }

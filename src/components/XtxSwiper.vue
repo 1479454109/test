@@ -25,18 +25,13 @@ const props = defineProps<{
   </view>
 </template>
 
-<style lang="scss" scoped>
-:host {
-  display: block;
-  height: 280rpx;
-}
-/* 轮播图 */
+<style lang="scss">
 .carousel {
   height: 280rpx;
   position: relative;
   overflow: hidden;
   transform: translateY(0);
-  background-color: #efefef;
+  background-color: #efefef; 
   .indicator {
     position: absolute;
     left: 0;
@@ -60,5 +55,10 @@ const props = defineProps<{
     width: 100%;
     height: 100%;
   }
+}
+
+:host {
+  display: block;
+  height: 280rpx;
 }
 </style>

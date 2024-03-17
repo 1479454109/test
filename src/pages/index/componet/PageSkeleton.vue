@@ -226,7 +226,192 @@
   </view>
 </template>
 
-<style lang="scss">
+<style lang="scss"> 
+/* #ifdef H5 || APP-PLUS */
+
+.carousel {
+  height: 280rpx;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+  background-color: #efefef;
+  .indicator {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 16rpx;
+    display: flex;
+    justify-content: center;
+    .dot {
+      width: 30rpx;
+      height: 6rpx;
+      margin: 0 8rpx;
+      border-radius: 6rpx;
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+    .active {
+      background-color: #fff;
+    }
+  }
+  .navigator,
+  .image {
+    width: 100%;
+    height: 100%;
+  }
+}
+.caption {
+  display: flex;
+  justify-content: center;
+  line-height: 1;
+  padding: 36rpx 0 40rpx;
+  font-size: 32rpx;
+  color: #262626;
+
+  .text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 28rpx 0 30rpx;
+
+    &::before,
+    &::after {
+      content: '';
+      width: 20rpx;
+      height: 20rpx;
+      background-image: url('@/static/images/bubble.png');
+      background-size: contain;
+      margin: 0 10rpx;
+    }
+  }
+}
+
+.guess {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0 20rpx;
+
+  .guess-item {
+    width: 345rpx;
+    padding: 24rpx 20rpx 20rpx;
+    margin-bottom: 20rpx;
+    border-radius: 10rpx;
+    overflow: hidden;
+    background-color: #fff;
+  }
+
+  .image {
+    width: 304rpx;
+    height: 304rpx;
+  }
+
+  .name {
+    height: 64rpx;
+    margin: 10rpx 0;
+    font-size: 26rpx;
+    color: #262626;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .price {
+    line-height: 1;
+    padding-top: 4rpx;
+    color: #cf4444;
+    font-size: 26rpx;
+  }
+
+  .small {
+    font-size: 80%;
+  }
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 28rpx;
+  color: #666;
+  padding: 20rpx 0;
+}
+.hot {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 508rpx;
+  margin: 20rpx 20rpx 0;
+  border-radius: 10rpx;
+  background-color: #fff;
+
+  .title {
+    display: flex;
+    align-items: center;
+    padding: 24rpx 24rpx 0;
+    font-size: 32rpx;
+    color: #262626;
+    position: relative;
+    .title-desc {
+      font-size: 24rpx;
+      color: #7f7f7f;
+      margin-left: 18rpx;
+    }
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 254rpx;
+    border-right: 1rpx solid #eee;
+    border-top: 1rpx solid #eee;
+    .title {
+      justify-content: start;
+    }
+    &:nth-child(2n) {
+      border-right: 0 none;
+    }
+    &:nth-child(-n + 2) {
+      border-top: 0 none;
+    }
+    .image {
+      width: 150rpx;
+      height: 150rpx;
+    }
+  }
+  .cards {
+    flex: 1;
+    padding: 15rpx 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+.category {
+  margin: 20rpx 0 0;
+  padding: 10rpx 0;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 328rpx;
+
+  .category-item {
+    width: 150rpx;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+
+    .icon {
+      width: 100rpx;
+      height: 100rpx;
+    }
+    .text {
+      font-size: 26rpx;
+      color: #666;
+    }
+  }
+}
+/* #endif */
 .sk-transparent {
   color: transparent !important;
 }

@@ -115,7 +115,7 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
 <template>
   <scroll-view
     scroll-y
-    class="scroll-view"
+    class="scroll-view cartBox"
     refresher-enabled
     @refresherrefresh="onrefresherrefresh"
     @scrolltolower="onScrolltolower"
@@ -151,7 +151,7 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
                 <view class="meta">
                   <view class="name ellipsis">{{ item.name }}</view>
                   <view class="attrsText ellipsis">{{ item.attrsText }}</view>
-                  <view class="price">{{ item.nowPrice }}</view>
+                  <view class="cartPrice">{{ item.nowPrice }}</view>
                 </view>
               </navigator>
               <!-- 商品数量 -->
@@ -198,23 +198,17 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
   </scroll-view>
 
   <!-- 吸底工具栏 -->
-  <view class="toolbar" v-if="memberStore?.profile">
+  <view class="cartToolbar" v-if="memberStore?.profile">
     <text @tap="onChangeSelectedAll" class="all" :class="{ checked: isSelectedAll }">全选</text>
     <text class="text">合计:</text>
     <text class="amount">{{ selectedCartListMoney }}</text>
     <view @tap="gotoPayment" class="button-grounp">
-      <view class="button payment-button" :class="{ disabled: true }">
+      <view class="button payment-button" :class="{ disabled: selectedCartListCount==0 }">
         去结算({{ selectedCartListCount }})
       </view>
     </view>
   </view>
-</template>
-
-<style>
-.toolbar {
-  bottom: var(--window-bottom);
-}
-</style>
+</template> 
 <style lang="scss">
 :host {
   height: 100vh;
@@ -223,10 +217,95 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
   overflow: hidden;
   background-color: #f7f7f8;
 }
+
+.cartToolbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--window-bottom);
+  z-index: 2;
+
+  height: 100rpx;
+  padding: 0 20rpx;
+  display: flex;
+  align-items: center;
+  border-top: 1rpx solid #ededed;
+  border-bottom: 1rpx solid #ededed;
+  background-color: #fff;
+  box-sizing: content-box;
+
+  .all {
+    margin-left: 25rpx;
+    font-size: 14px;
+    color: #444;
+    display: flex;
+    align-items: center;
+  }
+
+  .all::before {
+    font-family: 'erabbit' !important;
+    content: '\e6cd';
+    font-size: 40rpx;
+    margin-right: 8rpx;
+  }
+
+  .checked::before {
+    content: '\e6cc';
+    color: #27ba9b;
+  }
+
+  .text {
+    margin-right: 8rpx;
+    margin-left: 32rpx;
+    color: #444;
+    font-size: 14px;
+  }
+
+  .amount {
+    font-size: 20px;
+    color: #cf4444;
+
+    .decimal {
+      font-size: 12px;
+    }
+
+    &::before {
+      content: '￥';
+      font-size: 12px;
+    }
+  }
+
+  .button-grounp {
+    margin-left: auto;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    line-height: 72rpx;
+    font-size: 13px;
+    color: #fff;
+
+    .button {
+      width: 240rpx;
+      margin: 0 10rpx;
+      border-radius: 72rpx;
+    }
+
+    .payment-button {
+      background-color: #27ba9b;
+
+      &.disabled {
+        opacity: 0.6;
+      }
+    }
+  }
+}
+.toolbar-height {
+  height: 100rpx;
+}
 .scroll-view {
   flex: 1;
 }
-
+.cartBox{ 
 .cart-list {
   padding: 0 20rpx;
 
@@ -312,7 +391,7 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
       background-color: #f7f7f8;
     }
 
-    .price {
+    .cartPrice {
       line-height: 1;
       font-size: 26rpx;
       color: #444;
@@ -409,88 +488,5 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
   }
 }
 
-.toolbar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: var(--window-bottom);
-  z-index: 2;
-
-  height: 100rpx;
-  padding: 0 20rpx;
-  display: flex;
-  align-items: center;
-  border-top: 1rpx solid #ededed;
-  border-bottom: 1rpx solid #ededed;
-  background-color: #fff;
-  box-sizing: content-box;
-
-  .all {
-    margin-left: 25rpx;
-    font-size: 14px;
-    color: #444;
-    display: flex;
-    align-items: center;
-  }
-
-  .all::before {
-    font-family: 'erabbit' !important;
-    content: '\e6cd';
-    font-size: 40rpx;
-    margin-right: 8rpx;
-  }
-
-  .checked::before {
-    content: '\e6cc';
-    color: #27ba9b;
-  }
-
-  .text {
-    margin-right: 8rpx;
-    margin-left: 32rpx;
-    color: #444;
-    font-size: 14px;
-  }
-
-  .amount {
-    font-size: 20px;
-    color: #cf4444;
-
-    .decimal {
-      font-size: 12px;
-    }
-
-    &::before {
-      content: '￥';
-      font-size: 12px;
-    }
-  }
-
-  .button-grounp {
-    margin-left: auto;
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
-    line-height: 72rpx;
-    font-size: 13px;
-    color: #fff;
-
-    .button {
-      width: 240rpx;
-      margin: 0 10rpx;
-      border-radius: 72rpx;
-    }
-
-    .payment-button {
-      background-color: #27ba9b;
-
-      &.disabled {
-        opacity: 0.6;
-      }
-    }
-  }
-}
-.toolbar-height {
-  height: 100rpx;
 }
 </style>

@@ -118,7 +118,7 @@ const onrefresherrefresh = async () => {
   </view>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   height: 100%;
   background-color: #f4f4f4;
@@ -131,13 +131,16 @@ page {
   position: relative;
 }
 .cover {
-  width: 750rpx;
+  width: 100%;
   height: 225rpx;
   border-radius: 0 0 40rpx 40rpx;
   overflow: hidden;
   position: absolute;
   left: 0;
   top: 0;
+  uni-image{
+    width: 100%;
+  }
 }
 .scroll-view {
   flex: 1;

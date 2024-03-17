@@ -3,6 +3,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import {
   getMemberOrderPreAPI,
   getMemberOrderPreNowAPI,
+  getMemberOrderRepurchaseByIdAPI,
   postMemberOrderAPI,
 } from '../../services/order'
 import { computed, ref } from 'vue'
@@ -46,6 +47,7 @@ const selectAddress = computed(() => {
 
 //立即购买传递的参数
 const prop = defineProps<{
+  orderId:string
   skuId: string
   count: number
 }>()
@@ -55,9 +57,13 @@ const getOrderPreNow = async () => {
   orderPre.value = res.result
 }
 
-onLoad(() => {
+onLoad( async() => {
   if (prop?.skuId && prop?.count) {
     getOrderPreNow()
+  }else if (prop?.orderId) {
+    //再次购买
+  const res = await getMemberOrderRepurchaseByIdAPI(prop?.orderId)
+  orderPre.value = res.result
   } else {
     getOrderDesc()
   }

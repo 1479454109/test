@@ -154,6 +154,18 @@
 						"navigationStyle": "custom", //隐藏导航栏
 						"navigationBarTextStyle": "white" //导航栏字体颜色
 					}
+				},
+				{
+					"path": "payment/payment",
+					"style": {
+						"navigationBarTitleText": "支付成功页"
+					}
+				},
+				{
+					"path": "list/list",
+					"style": {
+						"navigationBarTitleText": "订单列表"
+					}
 				}
 			]
 		}

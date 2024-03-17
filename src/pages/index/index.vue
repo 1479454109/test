@@ -9,12 +9,12 @@
     scroll-y
   >
     <PageSkeleton v-if="isOnLoad" />
-    <template v-else>
-      <XtxSwiper :list="bannerList" />
+    <view v-show="!isOnLoad">
+      <XtxSwiper class="banner"  :list="bannerList" />
       <Category :list="categoryList" />
       <HotPanel :list="mutliList" />
       <XtxGuess ref="guess" />
-    </template>
+    </view>
   </scroll-view>
 </template>
 
@@ -58,10 +58,14 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
 </script>
 
 <style lang="scss">
+/* #ifdef APP-PLUS */
+#app, 
+/* #endif */
 page {
+  background-color: #f7f7f7;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  display: flex; 
+  flex-direction: column; 
 }
 .scrollBox {
   flex-grow: 1;
