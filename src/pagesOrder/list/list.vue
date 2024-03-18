@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref,onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import OrderList from './component/OrderList.vue'
 // tabs 数据
 const orderTabs = ref([
@@ -17,27 +17,28 @@ const query = defineProps<{
 const activeIndex = ref(orderTabs.value.findIndex((v) => v.orderState === Number(query.type)))
 
 //获取新数据
-const OrderListRef=ref()
-const onchange=($event:any)=>{   
-  activeIndex.value=$event.detail.current;  
-  //OrderListRef.value[activeIndex.value].onrefresherrefresh();   
+const OrderListRef = ref()
+const onchange = ($event: any) => {
+  activeIndex.value = $event.detail.current
+  OrderListRef.value[activeIndex.value].onrefresherrefresh()
 }
-  
 </script>
 
 <template>
   <view class="listViewport">
     <!-- tabs -->
     <view class="tabs">
-      <text @tap="activeIndex=index" class="item" v-for="(item,index) in orderTabs" :key="index"> {{ item.title }} </text>
+      <text @tap="activeIndex = index" class="item" v-for="(item, index) in orderTabs" :key="index">
+        {{ item.title }}
+      </text>
       <!-- 游标 -->
       <view class="cursor" :style="{ left: activeIndex * 20 + '%' }"></view>
     </view>
     <!-- 滑动容器 -->
-    <swiper :current="activeIndex"  @tap="onrefresh" class="swiper" @change="onchange">
+    <swiper :current="activeIndex" @tap="onrefresh" class="swiper" @change="onchange">
       <!-- 滑动项 -->
-      <swiper-item v-for="(item,index) in orderTabs" :key="index">
-        <OrderList ref="OrderListRef" :orderState="item?.orderState"/>
+      <swiper-item v-for="(item, index) in orderTabs" :key="index">
+        <OrderList ref="OrderListRef" :orderState="item?.orderState" />
       </swiper-item>
     </swiper>
   </view>
@@ -55,12 +56,12 @@ page {
   flex-direction: column;
   background-color: #fff;
 
-  uni-image{
+  uni-image {
     width: 100% !important;
     height: 100% !important;
   }
 }
- 
+
 .tabs {
   display: flex;
   justify-content: space-around;
@@ -91,9 +92,8 @@ page {
     transition: all 0.4s;
   }
 }
- 
+
 .swiper {
   background-color: #f7f7f8;
 }
- 
 </style>

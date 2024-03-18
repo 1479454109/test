@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { ref, defineProps } from 'vue'
 import type { CategoryItem } from '@/types/home'
+import { categoryStore } from '../../../stores/modules/category'
 const props = defineProps<{
   list: CategoryItem[]
 }>()
+const ontap = (index: number) => {
+  const store = categoryStore()
+  store.ckIndex = index
+  uni.switchTab({ url: '/pages/category/category' })
+}
 </script>
 
 <template>
@@ -11,8 +17,9 @@ const props = defineProps<{
     <navigator
       class="category-item"
       hover-class="none"
-      url="/pages/index/index"
-      v-for="item in list"
+      @tap.stop="() => {}"
+      @tap.prevent="ontap(index)"
+      v-for="(item, index) in list"
       :key="item.id"
     >
       <image class="icon" :src="item.icon"></image>
@@ -23,28 +30,28 @@ const props = defineProps<{
 
 <style lang="scss">
 .category {
-    margin: 20rpx 0 0;
-    padding: 10rpx 0;
+  margin: 20rpx 0 0;
+  padding: 10rpx 0;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 328rpx;
+
+  .category-item {
+    width: 150rpx;
     display: flex;
-    flex-wrap: wrap;
-    min-height: 328rpx;
-  
-    .category-item {
-      width: 150rpx;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      box-sizing: border-box;
-  
-      .icon {
-        width: 100rpx;
-        height: 100rpx;
-      }
-      .text {
-        font-size: 26rpx;
-        color: #666;
-      }
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+
+    .icon {
+      width: 100rpx;
+      height: 100rpx;
+    }
+    .text {
+      font-size: 26rpx;
+      color: #666;
     }
   }
+}
 </style>

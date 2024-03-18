@@ -3,7 +3,7 @@ import { getMemberProfileAPI, putMemberProfileAPI } from '@/services/profile'
 import type { userInfo } from '@/types/user'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-import { useMemberStore } from '@/stores/index' 
+import { useMemberStore } from '@/stores/index'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -22,28 +22,29 @@ const pickerChange = (evt: any) => {
   info.value.birthday = evt.detail.value
 }
 //城市
-let fullLocationCode: string[] = ['', '', '']
+let fullLocationCode = ref(['', '', ''])
 const pickerRegionChange = (evt: any) => {
-  fullLocationCode = evt.detail.code
+  fullLocationCode.value = evt.detail.code
   info.value!.fullLocation = evt.detail.value.join(' ')
 }
-let defaultRegionCode =ref('440113');
-const handleGetRegion=(region:any)=>{
-  console.log(region); 
-            }
+
+//  #ifdef H5 || APP-PLUS
+const onCityChange = (e: any) => {
+  const [provinceCode, cityCode, countyCode] = e.detail.value.map((e: any) => e.value)
+  fullLocationCode.value = [provinceCode, cityCode, countyCode]
+}
+// #endif
 //保存个人信息
 const store = useMemberStore()
 const commit = async () => {
-  console.log(info.value)
-  console.log(fullLocationCode)
   const res = await putMemberProfileAPI({
     nickname: info.value.nickname, //昵称
     gender: info.value.gender, //性别
     birthday: info.value.birthday, //生日
     profession: info.value.profession, //职业
-    provinceCode: fullLocationCode[0], //省份编码
-    cityCode: fullLocationCode[1], //城市编码
-    countyCode: fullLocationCode[2], //区/县编码
+    provinceCode: fullLocationCode.value[0], //省份编码
+    cityCode: fullLocationCode.value[1], //城市编码
+    countyCode: fullLocationCode.value[2], //区/县编码
   })
   store.profile!.nickname = info.value.nickname
   uni.showToast({
@@ -126,7 +127,7 @@ const eitImage = () => {
 </script>
 
 <template>
-  <view class="viewport">
+  <view class="profileViewport">
     <!-- 导航栏 -->
     <view class="navbar" :style="{ paddingTop: safeAreaInsets?.top + 'px' }">
       <navigator open-type="navigateBack" class="back icon-left" hover-class="none"></navigator>
@@ -192,9 +193,23 @@ const eitImage = () => {
           </picker>
           <!-- #endif -->
 
-          <!-- #ifdef H5 || APP-PLUS--> 
+          <!-- #ifdef H5 || APP-PLUS-->
+          <uni-data-picker
+            placeholder="请选择地址"
+            popup-title="请选择城市"
+            collection="opendb-city-china"
+            field="code as value, name as text"
+            orderby="value asc"
+            :step-searh="true"
+            self-field="code"
+            parent-field="parent_code"
+            :clear-icon="false"
+            @change="onCityChange"
+            v-model="fullLocationCode[2]"
+          >
+            <view v-if="fullLocationCode[2] == ''">{{ info?.fullLocation }}</view>
+          </uni-data-picker>
           <!-- #endif -->
-
         </view>
         <view class="form-item">
           <text class="label">职业</text>
@@ -212,13 +227,22 @@ page {
   background-color: #f4f4f4;
 }
 
-.viewport {
+.profileViewport {
   display: flex;
   flex-direction: column;
   height: 100%;
   background-image: url(https://pcapi-xiaotuxian-front-devtest.itheima.net/miniapp/images/order_bg.png);
   background-size: auto 420rpx;
   background-repeat: no-repeat;
+
+  /* #ifdef H5 || APP-PLUS */
+  .form {
+    :deep(.selected-area) {
+      height: auto;
+      flex: 0 1 auto;
+    }
+  }
+  /* #endif */
 }
 
 .navbar {

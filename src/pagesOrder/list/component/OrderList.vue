@@ -99,21 +99,20 @@ const orderList = ref<OrderListResult>()
 const page = ref(1)
 let finished = ref(true) //还不是全部数据
 const getMemberOrder = async () => {
-  console.log('请求数据');
   const res = await getMemberOrderAPI({
     page: page.value,
     pageSize: 5,
     orderState: props.orderState,
   })
-  if (!orderList.value || !orderList.value.items) {
+  if (page.value == 1) {
     orderList.value = res.result
-  } else if (orderList.value.items && orderList.value.items.length > 0) {
-    orderList.value.items.push(...res.result.items)
+  } else {
+    orderList.value!.items.push(...res.result.items)
   }
   finished.value = res.result.pages > page.value
 }
 //触底
-const onScrolltolower = () => { 
+const onScrolltolower = () => {
   //是否已是全部记录
   if (finished.value) {
     page.value = page.value + 1
@@ -122,17 +121,13 @@ const onScrolltolower = () => {
 }
 //下拉刷新动画
 const isTriggered = ref(false)
-const onrefresherrefresh = async () => { 
+const onrefresherrefresh = async () => {
   page.value = 1 //重置页码
-  console.log(orderList.value); 
-  if(orderList.value?.items){ 
-    orderList.value!.items=[]
-  }
   isTriggered.value = true
   await getMemberOrder()
   isTriggered.value = false //等待请求发送完才执行
 }
-onShow(()=>{
+onShow(() => {
   onrefresherrefresh()
 })
 //删除订单
@@ -185,16 +180,12 @@ const onOrderConfirm = (id: string) => {
 // 订单支付
 const onOrderPay = async (id: string) => {
   // 通过环境变量区分开发环境
-  if (import.meta.env.DEV) {
-    // 开发环境：模拟支付，修改订单状态为已支付
-    await getPayMockAPI({ orderId: id })
-  } else {
-    // 生产环境：获取支付参数 + 发起微信支付 
-    // #ifdef MP-WEIXIN
-    const res = await getPayWxPayMiniPayAPI({ orderId: id })
-    await wx.requestPayment(res.result) 
-    // #endif
-  }
+  await getPayMockAPI({ orderId: id })
+  // 生产环境：获取支付参数 + 发起微信支付
+  // #ifdef MP-WEIXIN
+  const res = await getPayWxPayMiniPayAPI({ orderId: id })
+  await wx.requestPayment(res.result)
+  // #endif
   uni.showToast({
     icon: 'success',
     title: '支付成功',
@@ -204,9 +195,9 @@ const onOrderPay = async (id: string) => {
   item!.orderState = OrderState.DaiFaHuo
 }
 
-defineExpose({ 
+defineExpose({
   onrefresherrefresh,
-  getMemberOrder
+  getMemberOrder,
 })
 </script>
 <style lang="scss" scoped>

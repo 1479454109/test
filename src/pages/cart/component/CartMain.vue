@@ -203,12 +203,12 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
     <text class="text">合计:</text>
     <text class="amount">{{ selectedCartListMoney }}</text>
     <view @tap="gotoPayment" class="button-grounp">
-      <view class="button payment-button" :class="{ disabled: selectedCartListCount==0 }">
+      <view class="button payment-button" :class="{ disabled: selectedCartListCount == 0 }">
         去结算({{ selectedCartListCount }})
       </view>
     </view>
   </view>
-</template> 
+</template>
 <style lang="scss">
 :host {
   height: 100vh;
@@ -305,188 +305,187 @@ const { guess, isTriggered, onScrolltolower, onrefresherrefresh } = useGuessList
 .scroll-view {
   flex: 1;
 }
-.cartBox{ 
-.cart-list {
-  padding: 0 20rpx;
+.cartBox {
+  .cart-list {
+    padding: 0 20rpx;
 
-  .tips {
-    display: flex;
-    align-items: center;
-    line-height: 1;
-    margin: 30rpx 10rpx;
-    font-size: 26rpx;
-    color: #666;
-
-    .label {
-      color: #fff;
-      padding: 7rpx 15rpx 5rpx;
-      border-radius: 4rpx;
-      font-size: 24rpx;
-      background-color: #27ba9b;
-      margin-right: 10rpx;
-    }
-  }
-
-  .goods {
-    display: flex;
-    padding: 20rpx 20rpx 20rpx 80rpx;
-    border-radius: 10rpx;
-    background-color: #fff;
-    position: relative;
-
-    .navigator {
-      display: flex;
-    }
-
-    .checkbox {
-      position: absolute;
-      top: 0;
-      left: 0;
-
+    .tips {
       display: flex;
       align-items: center;
-      justify-content: center;
-      width: 80rpx;
-      height: 100%;
-
-      &::before {
-        content: '\e6cd';
-        font-family: 'erabbit' !important;
-        font-size: 40rpx;
-        color: #444;
-      }
-
-      &.checked::before {
-        content: '\e6cc';
-        color: #27ba9b;
-      }
-    }
-
-    .picture {
-      width: 170rpx;
-      height: 170rpx;
-    }
-
-    .meta {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      margin-left: 20rpx;
-    }
-
-    .name {
-      height: 72rpx;
-      font-size: 26rpx;
-      color: #444;
-    }
-
-    .attrsText {
-      line-height: 1.8;
-      padding: 0 15rpx;
-      font-size: 24rpx;
-      align-self: flex-start;
-      border-radius: 4rpx;
-      color: #888;
-      background-color: #f7f7f8;
-    }
-
-    .cartPrice {
       line-height: 1;
+      margin: 30rpx 10rpx;
       font-size: 26rpx;
-      color: #444;
-      margin-bottom: 2rpx;
-      color: #cf4444;
+      color: #666;
 
-      &::before {
-        content: '￥';
-        font-size: 80%;
-      }
-    }
-
-    .count {
-      position: absolute;
-      bottom: 20rpx;
-      right: 5rpx;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 220rpx;
-      height: 48rpx;
-
-      .text {
-        height: 100%;
-        padding: 0 20rpx;
-        font-size: 32rpx;
-        color: #444;
-      }
-
-      .input {
-        height: 100%;
-        text-align: center;
+      .label {
+        color: #fff;
+        padding: 7rpx 15rpx 5rpx;
         border-radius: 4rpx;
         font-size: 24rpx;
+        background-color: #27ba9b;
+        margin-right: 10rpx;
+      }
+    }
+
+    .goods {
+      display: flex;
+      padding: 20rpx 20rpx 20rpx 80rpx;
+      border-radius: 10rpx;
+      background-color: #fff;
+      position: relative;
+
+      .navigator {
+        display: flex;
+      }
+
+      .checkbox {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 80rpx;
+        height: 100%;
+
+        &::before {
+          content: '\e6cd';
+          font-family: 'erabbit' !important;
+          font-size: 40rpx;
+          color: #444;
+        }
+
+        &.checked::before {
+          content: '\e6cc';
+          color: #27ba9b;
+        }
+      }
+
+      .picture {
+        width: 170rpx;
+        height: 170rpx;
+      }
+
+      .meta {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-left: 20rpx;
+      }
+
+      .name {
+        height: 72rpx;
+        font-size: 26rpx;
         color: #444;
-        background-color: #f6f6f6;
+      }
+
+      .attrsText {
+        line-height: 1.8;
+        padding: 0 15rpx;
+        font-size: 24rpx;
+        align-self: flex-start;
+        border-radius: 4rpx;
+        color: #888;
+        background-color: #f7f7f8;
+      }
+
+      .cartPrice {
+        line-height: 1;
+        font-size: 26rpx;
+        color: #444;
+        margin-bottom: 2rpx;
+        color: #cf4444;
+
+        &::before {
+          content: '￥';
+          font-size: 80%;
+        }
+      }
+
+      .count {
+        position: absolute;
+        bottom: 20rpx;
+        right: 5rpx;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 220rpx;
+        height: 48rpx;
+
+        .text {
+          height: 100%;
+          padding: 0 20rpx;
+          font-size: 32rpx;
+          color: #444;
+        }
+
+        .input {
+          height: 100%;
+          text-align: center;
+          border-radius: 4rpx;
+          font-size: 24rpx;
+          color: #444;
+          background-color: #f6f6f6;
+        }
+      }
+    }
+
+    .cart-swipe {
+      display: block;
+      margin: 20rpx 0;
+    }
+
+    .cart-swipe-right {
+      display: flex;
+      height: 100%;
+
+      .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        padding: 6px;
+        line-height: 1.5;
+        color: #fff;
+        font-size: 26rpx;
+        border-radius: 0;
+      }
+
+      .delete-button {
+        background-color: #cf4444;
       }
     }
   }
 
-  .cart-swipe {
-    display: block;
-    margin: 20rpx 0;
-  }
-
-  .cart-swipe-right {
+  .cart-blank,
+  .login-blank {
     display: flex;
-    height: 100%;
-
-    .button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 50px;
-      padding: 6px;
-      line-height: 1.5;
-      color: #fff;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 60vh;
+    .image {
+      width: 400rpx;
+      height: 281rpx;
+    }
+    .text {
+      color: #444;
       font-size: 26rpx;
-      border-radius: 0;
+      margin: 20rpx 0;
     }
-
-    .delete-button {
-      background-color: #cf4444;
+    .button {
+      width: 240rpx !important;
+      height: 60rpx;
+      line-height: 60rpx;
+      margin-top: 20rpx;
+      font-size: 26rpx;
+      border-radius: 60rpx;
+      color: #fff;
+      background-color: #27ba9b;
     }
   }
-}
-
-.cart-blank,
-.login-blank {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 60vh;
-  .image {
-    width: 400rpx;
-    height: 281rpx;
-  }
-  .text {
-    color: #444;
-    font-size: 26rpx;
-    margin: 20rpx 0;
-  }
-  .button {
-    width: 240rpx !important;
-    height: 60rpx;
-    line-height: 60rpx;
-    margin-top: 20rpx;
-    font-size: 26rpx;
-    border-radius: 60rpx;
-    color: #fff;
-    background-color: #27ba9b;
-  }
-}
-
 }
 </style>
